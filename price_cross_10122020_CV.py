@@ -61,33 +61,16 @@ class BackToAverageStrategy(Strategy):
             #1 below MA
             self.signals['belowMA'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] < 
             self.signals['short_mavg'][self.short_window:], 1.0, 0.0)
-            
-            #self.signals['belowMA'] = np.where(self.signals['Close'][self.short_window:] < 
-            #self.signals['short_mavg'][self.short_window:], 1.0, 0.0)
-            
-            
             print('after 1st below')
             
             #2 Diversion by x
-            #self.signals['diversion'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] < 
-            #(self.signals['short_mavg'][self.short_window:]-0.02*self.signals['Close'][self.short_window:]), 1.0, 0.0)
-            
             temptest = self.signals['short_mavg'][self.short_window:]-100
             #2 Diversion by x
             self.signals['diversion'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] < 
             self.signals['short_mavg'][self.short_window:]-50, 1.0, 0.0)
             
-            
             #3 sB
-            #self.signals['sB'][self.short_window:] = np.where((self.signals['diversion'][self.short_window:]==0) && (self.signals['belowMA'][self.short_window:]==0)), 0.0, 1.0)
-            #self.signals['sB'][self.short_window:] = np.where((self.signals['diversion'][self.short_window:]==0.0) & (self.signals['belowMA'][self.short_window:]==0.0), 0.0, 1.0)
-            
-            #if (self.signals['belowMA'][self.short_window:] == 1) & (self.signals['diversion'][self.short_window:] == 1):
-            
-            #[self.short_window:]
-                
             self.signals['sB'] = ((self.signals['belowMA'] == 1) & (self.signals['diversion'] == 1)).astype(int)
-
             # ilocs
             self.signals.reset_index(inplace=True)
             countdf = self.signals.index.size
@@ -100,29 +83,6 @@ class BackToAverageStrategy(Strategy):
             
             self.signals.set_index('Date', inplace=True) 
 
-
-#            if self.signals['belowMA'] == 0: # & [self.signals['diversion'][self.short_window:] == 0.0]):
-#                #self.signals['booltrade'][self.short_window:] = 0
-#                #self.signals['sB'][self.short_window:] = 0
-#                print('in 2st IF')
-#                
-#            if [(self.signals['belowMA'][self.short_window:]==1) & (self.signals['diversion'][self.short_window:]) == 1]:
-#                self.signals['booltrade'][self.short_window:] = 1
-#                self.signals['sB'][self.short_window:] = 1
-#                print('in 1st IF')
-            
-#            if [(self.signals['booltrade'][self.short_window:] == 1)]:
-#                print('in 2st IF')
-#                if [(self.signals['belowMA'][self.short_window:]==1) & (self.signals['diversion'][self.short_window:]) == 1]:
-#                    self.signals['sB'][self.short_window:] = 1
-#                    print('in 3st IF')                
-#                if [(self.signals['belowMA'][self.short_window:] == 1)]:
-#                    self.signals['sB'][self.short_window:] = 1
-#                    print('in 4st IF')
-#                if [(self.signals['belowMA'][self.short_window:] == 0)]:
-#                    self.signals['sB'][self.short_window:] = 2
-#                    self.signals['booltrade'][self.short_window:] = 0
-#                    print('in 5st IF')
             #4 Difference it
             self.signals['positionsB'] = self.signals['sB'].diff()   
             
@@ -130,44 +90,33 @@ class BackToAverageStrategy(Strategy):
             self.signals['TradeID'] = abs(self.signals['positionsB']).cumsum()
             self.signals['TradeID'] =  self.signals['TradeID']*abs(self.signals['positionsB'])
             
-            '''
-            self.signals['sB'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] < 
-            (self.signals['short_mavg'][self.short_window:]-0.02*self.signals['Close'][self.short_window:]), 1.0, 0.0)
             
-            self.signals['sS'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] > 
-            self.signals['short_mavg'][self.short_window:], -1.0, 0.0)
-        
-            self.signals['positionsB'] = self.signals['sB'].diff()   
-            self.signals['positionsS'] = self.signals['sS'].diff()   
-            
-            self.signals['TradeID'] = abs(self.signals['positionsB']).cumsum()
-            self.signals['TradeID'] =  self.signals['TradeID']*abs(self.signals['positionsB'])
-            #self.signals['ActualTradePrice'] = np.where(self.signals['positionsB']>0, self.signals['positionsB']*self.signals['Close'],0)
-            '''
         else: 
             print('IN SELL strategy2')
             '''Signals to SELL when price above MA and has a certain degree of diversion from the average. When price moves above MA to position is implicitly closed''' 
             #1 below MA
             self.signals['aboveMA'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] > 
             self.signals['short_mavg'][self.short_window:], -1.0, 0.0)
-            
-            #self.signals['belowMA'] = np.where(self.signals['Close'][self.short_window:] < 
-            #self.signals['short_mavg'][self.short_window:], 1.0, 0.0)
-            
-            
             print('after 1st below')
             
-            #2 Diversion by x
-            #self.signals['diversion'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] > 
-            #(self.signals['short_mavg'][self.short_window:]+0.05*self.signals['Close'][self.short_window:]), -1.0, 0.0)
-          
-             #2 Diversion by x
-            self.signals['diversion'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] > 
-            (self.signals['short_mavg'][self.short_window:]+100), -1.0, 0.0)
             
-            #3 sB
-            #self.signals['sB'][self.short_window:] = np.where((self.signals['diversion'][self.short_window:]==0) && (self.signals['belowMA'][self.short_window:]==0)), 0.0, 1.0)
-            self.signals['sS'][self.short_window:] = np.where((self.signals['diversion'][self.short_window:]==0.0) & (self.signals['aboveMA'][self.short_window:]==0.0), 0.0, -1.0)
+            #2 Diversion by x
+            self.signals['diversion'][self.short_window:] = np.where(self.signals['Close'][self.short_window:] > 
+            (self.signals['short_mavg'][self.short_window:]+50), -1.0, 0.0)
+            
+            #3 sS
+            self.signals['sS'] = ((self.signals['aboveMA'] == -1) & (self.signals['diversion'] == -1)).astype(int)
+            # ilocs
+            self.signals.reset_index(inplace=True)
+            countdf = self.signals.index.size
+            for row in range(0, countdf):
+                if row > 0:
+                    if ((self.signals.iloc[row]['sS'] == 0) & (self.signals.iloc[row - 1]['sS'] == 1) & (self.signals.iloc[row]['aboveMA'] == -1)):
+                        self.signals.loc[row, 'sS'] = 1
+                        
+            
+            
+            self.signals.set_index('Date', inplace=True) 
             
             
             #4 Difference it
@@ -179,24 +128,6 @@ class BackToAverageStrategy(Strategy):
             
             
             
-            ''' OLD'''
-            '''
-            self.signals['sS'][self.short_window:] = np.where(self.signals['short_mavg'][self.short_window:] < 
-            self.signals['Close'][self.short_window:], -1.0, 0.0)
-            
-            #self.signals['sB'][self.short_window:] = np.where(self.signals['short_mavg'][self.short_window:] > 
-            #self.signals['Close'][self.short_window:], 1.0, 0.0)
-        
-        
-        
-            #self.signals['positionsB'] = self.signals['sB'].diff()   
-            self.signals['positionsS'] = self.signals['sS'].diff()   
-            
-            self.signals['TradeID'] = abs(self.signals['positionsS']).cumsum()
-            self.signals['TradeID'] =  self.signals['TradeID']*abs(self.signals['positionsS'])
-            '''
-            #self.signals['ActualTradePrice'] = np.where(self.signals['positionsB']>0, self.signals['positionsB']*self.signals['Close'],0)
-        
         
         if self.trade_direction == 'BUY':
              ################################################
@@ -695,7 +626,7 @@ class MarketPortfolio(Portfolio):
             
             ###########################################################################################
             #self.portfolio['boolCrystallization'] = (self.portfolio['cumUncrystallized']!=0) & (self.portfolio['cumUncrystallized'].shift(-1)==0)
-            self.portfolio['boolCrystallization'] = self.portfolio['positionsS'] > 0
+            self.portfolio['boolCrystallization'] = self.portfolio['positionsS'] < 0
             self.portfolio['cumCrystallized'] = self.portfolio['boolCrystallization']*self.portfolio['cumUncrystallized'] 
             
             #pprint.pprint(product_data.MMargin_DTR)
@@ -714,6 +645,7 @@ class MarketPortfolio(Portfolio):
             self.portfolio['Variation_Margin2'] = self.portfolio['signalsB'].shift(+1)*((marginDeposit - self.portfolio['MarginAccount'].shift(+1))*self.portfolio['Margin_call_bool'].shift(+1))
             '''
             ''' PROBLEM IN UPDATING MarginAccount with variation margin amount''' 
+            
             
         
             self.portfolio['cash_Trading'] = self.initial_capital - (pos_diffS*marginDeposit).cumsum() + self.portfolio['cumCrystallized'].cumsum() 
