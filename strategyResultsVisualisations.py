@@ -139,13 +139,13 @@ def strategyEntryVisualisation(bars, df2, ma):
     
     #if trade == 'BUY' then: 
     
-    p.triangle(df2.loc[df2.positionsB == 1.0].index, df2.TradedPrice[df2.positionsB == 1.0],8,fill_color="blue")
-    p.triangle(df2.loc[df2.positionsB == -1.0].index, df2.TradedPrice[df2.positionsB == -1.0],8,fill_color="red",angle=45)   
+    #p.triangle(df2.loc[df2.positionsB == 1.0].index, df2.TradedPrice[df2.positionsB == 1.0],8,fill_color="blue")
+    #p.triangle(df2.loc[df2.positionsB == -1.0].index, df2.TradedPrice[df2.positionsB == -1.0],8,fill_color="red",angle=45)   
 
     #else:
 
-    #p.triangle(df2.loc[df2.positionsS == -1.0].index, df2.TradedPrice[df2.positionsS == -1.0],8,fill_color="red",angle=45)
-    #p.triangle(df2.loc[df2.positionsS == 1.0].index, df2.TradedPrice[df2.positionsS == 1.0],8,fill_color="blue")      
+    p.triangle(df2.loc[df2.positionsS == 1.0].index, df2.TradedPrice[df2.positionsS == 1.0],8,fill_color="red",angle=45)
+    p.triangle(df2.loc[df2.positionsS == -1.0].index, df2.TradedPrice[df2.positionsS == -1.0],8,fill_color="blue")      
     
     
     '''           
@@ -210,5 +210,5 @@ def getVisualization(**kwargs):
     
     
     
-    visualiseStrategyResults()
-    #strategyEntryVisualisation(bars, df2,ma)
+    #visualiseStrategyResults()
+    strategyEntryVisualisation(bars, df2,ma)
