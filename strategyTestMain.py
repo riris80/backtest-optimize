@@ -55,7 +55,7 @@ if __name__ == "__main__":
     long_window=100
     margin=0.1
     optimization = False
-    trade_direction = 'BUY'
+    trade_direction = 'SELL'
     #strategy_selection = 'AveragePriceCrossStrategy'
     
     
@@ -74,6 +74,27 @@ if __name__ == "__main__":
         #returns.to_csv('ReturnsNew.csv')
         
         srv.getVisualization(ma=short_window)
+    
+        ###################Portfolio Stats!#####################################################
+        '''Gather the list of '''
+        portfoliolist = list()
+        #initial_capital = 10000
+        portfolioentries = fms.countFileEntries('Portfolio')
+        #trade_direction = 'BUY'
+        for i in range(0,portfolioentries):
+            portfolio = pd.read_csv(f'Portfolio{i}.csv')
+            portfoliolist.append(portfolio)
+        
+        #trying to make code better
+        attribution = StrategyPerformance(portfoliolist,0.02, initial_capital,trade_direction)
+        stats=attribution.generate_stats()
+        for item in range(len(stats)):
+            print('\n')  
+            for key, value in stats[item].items():  
+                print(key, ' : ', value)
+        
+        #########################################################################################
+    
     
     #User selects to Optimize strategy 
     else:
